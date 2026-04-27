@@ -365,6 +365,7 @@
 #![feature(ptr_mask)]
 #![feature(random)]
 #![feature(raw_os_error_ty)]
+#![feature(seek_stream_len)]
 #![feature(slice_internals)]
 #![feature(slice_ptr_get)]
 #![feature(slice_range)]

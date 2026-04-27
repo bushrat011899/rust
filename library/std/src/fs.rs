@@ -1541,6 +1541,7 @@ impl Seek for File {
         (&*self).stream_position()
     }
 }
+#[stable(feature = "io_traits_arc", since = "1.73.0")]
 impl crate::io::IoHandle for File {}
 
 impl Dir {
