@@ -6,9 +6,9 @@ mod impls;
 #[unstable(feature = "core_io_borrowed_buf", issue = "117693")]
 pub use core::io::{BorrowedBuf, BorrowedCursor};
 #[unstable(feature = "core_io_internals", reason = "exposed only for libstd", issue = "none")]
-pub use core::io::{IoHandle, stream_len_default};
+pub use core::io::{IoHandle, default_write_vectored, stream_len_default};
 #[unstable(feature = "alloc_io", issue = "154046")]
-pub use core::io::{Seek, SeekFrom};
+pub use core::io::{IoSlice, IoSliceMut, Seek, SeekFrom, Write};
 
 #[unstable(feature = "raw_os_error_ty", issue = "107792")]
 pub use self::error::RawOsError;

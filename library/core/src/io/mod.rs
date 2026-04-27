@@ -5,6 +5,7 @@ mod error;
 mod impls;
 mod io_slice;
 mod seek;
+mod write;
 
 #[unstable(feature = "core_io_borrowed_buf", issue = "117693")]
 pub use self::borrowed_buf::{BorrowedBuf, BorrowedCursor};
@@ -24,6 +25,10 @@ pub use self::io_slice::{IoSlice, IoSliceMut};
 pub use self::seek::stream_len_default;
 #[unstable(feature = "core_io", issue = "154046")]
 pub use self::seek::{Seek, SeekFrom};
+#[unstable(feature = "core_io", issue = "154046")]
+pub use self::write::Write;
+#[unstable(feature = "core_io_internals", reason = "exposed only for libstd", issue = "none")]
+pub use self::write::default_write_vectored;
 
 /// Marks that a type `T` can have IO traits such as [`Seek`], [`Write`][write], etc. automatically
 /// implemented for handle types like [`Arc`][arc] as well.
