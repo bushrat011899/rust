@@ -149,6 +149,7 @@ impl Seek for Empty {
     }
 }
 
+#[unstable(feature = "core_io_internals", reason = "exposed only for libstd", issue = "none")]
 impl SizeHint for Empty {
     #[inline]
     fn upper_bound(&self) -> Option<usize> {
@@ -317,6 +318,7 @@ impl Read for Repeat {
     }
 }
 
+#[unstable(feature = "core_io_internals", reason = "exposed only for libstd", issue = "none")]
 impl SizeHint for Repeat {
     #[inline]
     fn lower_bound(&self) -> usize {

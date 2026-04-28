@@ -9,10 +9,15 @@
 //! that user code which wants to do reads from a `BufReader` via `buffer` + `consume` can do so
 //! without encountering any runtime bounds checks.
 
-use crate::cmp;
-use crate::io::{self, BorrowedBuf, ErrorKind, Read};
-use crate::mem::MaybeUninit;
+use core::cmp;
+use core::mem::MaybeUninit;
 
+use crate::boxed::Box;
+use crate::io::{self, BorrowedBuf, ErrorKind, Read};
+
+#[unstable(feature = "core_io_internals", reason = "exposed only for libstd", issue = "none")]
+#[doc(hidden)]
+#[derive(Debug)]
 pub struct Buffer {
     // The buffer.
     buf: Box<[MaybeUninit<u8>]>,
@@ -30,12 +35,16 @@ pub struct Buffer {
 }
 
 impl Buffer {
+    #[unstable(feature = "core_io_internals", reason = "exposed only for libstd", issue = "none")]
+    #[doc(hidden)]
     #[inline]
     pub fn with_capacity(capacity: usize) -> Self {
         let buf = Box::new_uninit_slice(capacity);
         Self { buf, pos: 0, filled: 0, initialized: false }
     }
 
+    #[unstable(feature = "core_io_internals", reason = "exposed only for libstd", issue = "none")]
+    #[doc(hidden)]
     #[inline]
     pub fn try_with_capacity(capacity: usize) -> io::Result<Self> {
         match Box::try_new_uninit_slice(capacity) {
@@ -46,6 +55,8 @@ impl Buffer {
         }
     }
 
+    #[unstable(feature = "core_io_internals", reason = "exposed only for libstd", issue = "none")]
+    #[doc(hidden)]
     #[inline]
     pub fn buffer(&self) -> &[u8] {
         // SAFETY: self.pos and self.filled are valid, and self.filled >= self.pos, and
@@ -53,33 +64,44 @@ impl Buffer {
         unsafe { self.buf.get_unchecked(self.pos..self.filled).assume_init_ref() }
     }
 
+    #[unstable(feature = "core_io_internals", reason = "exposed only for libstd", issue = "none")]
+    #[doc(hidden)]
     #[inline]
     pub fn capacity(&self) -> usize {
         self.buf.len()
     }
 
+    #[unstable(feature = "core_io_internals", reason = "exposed only for libstd", issue = "none")]
+    #[doc(hidden)]
     #[inline]
     pub fn filled(&self) -> usize {
         self.filled
     }
 
+    #[unstable(feature = "core_io_internals", reason = "exposed only for libstd", issue = "none")]
+    #[doc(hidden)]
     #[inline]
     pub fn pos(&self) -> usize {
         self.pos
     }
 
     // This is only used by a test which asserts that the initialization-tracking is correct.
-    #[cfg(test)]
+    #[unstable(feature = "core_io_internals", reason = "exposed only for libstd", issue = "none")]
+    #[doc(hidden)]
     pub fn initialized(&self) -> bool {
         self.initialized
     }
 
+    #[unstable(feature = "core_io_internals", reason = "exposed only for libstd", issue = "none")]
+    #[doc(hidden)]
     #[inline]
     pub fn discard_buffer(&mut self) {
         self.pos = 0;
         self.filled = 0;
     }
 
+    #[unstable(feature = "core_io_internals", reason = "exposed only for libstd", issue = "none")]
+    #[doc(hidden)]
     #[inline]
     pub fn consume(&mut self, amt: usize) {
         self.pos = cmp::min(self.pos + amt, self.filled);
@@ -87,6 +109,8 @@ impl Buffer {
 
     /// If there are `amt` bytes available in the buffer, pass a slice containing those bytes to
     /// `visitor` and return true. If there are not enough bytes available, return false.
+    #[unstable(feature = "core_io_internals", reason = "exposed only for libstd", issue = "none")]
+    #[doc(hidden)]
     #[inline]
     pub fn consume_with<V>(&mut self, amt: usize, mut visitor: V) -> bool
     where
@@ -102,12 +126,16 @@ impl Buffer {
         }
     }
 
+    #[unstable(feature = "core_io_internals", reason = "exposed only for libstd", issue = "none")]
+    #[doc(hidden)]
     #[inline]
     pub fn unconsume(&mut self, amt: usize) {
         self.pos = self.pos.saturating_sub(amt);
     }
 
     /// Read more bytes into the buffer without discarding any of its contents
+    #[unstable(feature = "core_io_internals", reason = "exposed only for libstd", issue = "none")]
+    #[doc(hidden)]
     pub fn read_more(&mut self, mut reader: impl Read) -> io::Result<usize> {
         let mut buf = BorrowedBuf::from(&mut self.buf[self.filled..]);
 
@@ -125,12 +153,16 @@ impl Buffer {
     }
 
     /// Remove bytes that have already been read from the buffer.
+    #[unstable(feature = "core_io_internals", reason = "exposed only for libstd", issue = "none")]
+    #[doc(hidden)]
     pub fn backshift(&mut self) {
         self.buf.copy_within(self.pos..self.filled, 0);
         self.filled -= self.pos;
         self.pos = 0;
     }
 
+    #[unstable(feature = "core_io_internals", reason = "exposed only for libstd", issue = "none")]
+    #[doc(hidden)]
     #[inline]
     pub fn fill_buf(&mut self, mut reader: impl Read) -> io::Result<&[u8]> {
         // If we've reached the end of our internal buffer then we need to fetch

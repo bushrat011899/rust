@@ -1,12 +1,16 @@
 mod buffer;
 
-use buffer::Buffer;
+use core::fmt;
 
-use crate::fmt;
+#[unstable(feature = "core_io_internals", reason = "exposed only for libstd", issue = "none")]
+pub use buffer::Buffer;
+
 use crate::io::{
     self, BorrowedCursor, BufRead, DEFAULT_BUF_SIZE, IoSliceMut, Read, Seek, SeekFrom, SizeHint,
     SpecReadByte, uninlined_slow_read_byte,
 };
+use crate::string::String;
+use crate::vec::Vec;
 
 /// The `BufReader<R>` struct adds buffering to any reader.
 ///
@@ -74,11 +78,15 @@ impl<R: Read> BufReader<R> {
         BufReader::with_capacity(DEFAULT_BUF_SIZE, inner)
     }
 
-    pub(crate) fn try_new_buffer() -> io::Result<Buffer> {
+    #[unstable(feature = "core_io_internals", reason = "exposed only for libstd", issue = "none")]
+    #[doc(hidden)]
+    pub fn try_new_buffer() -> io::Result<Buffer> {
         Buffer::try_with_capacity(DEFAULT_BUF_SIZE)
     }
 
-    pub(crate) fn with_buffer(inner: R, buf: Buffer) -> Self {
+    #[unstable(feature = "core_io_internals", reason = "exposed only for libstd", issue = "none")]
+    #[doc(hidden)]
+    pub fn with_buffer(inner: R, buf: Buffer) -> Self {
         Self { inner, buf }
     }
 
@@ -279,7 +287,9 @@ impl<R: ?Sized> BufReader<R> {
 
     /// Invalidates all data in the internal buffer.
     #[inline]
-    pub(in crate::io) fn discard_buffer(&mut self) {
+    #[unstable(feature = "core_io_internals", reason = "exposed only for libstd", issue = "none")]
+    #[doc(hidden)]
+    pub fn discard_buffer(&mut self) {
         self.buf.discard_buffer()
     }
 }

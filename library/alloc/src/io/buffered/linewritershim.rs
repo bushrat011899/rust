@@ -12,12 +12,16 @@ use crate::io::{self, BufWriter, IoSlice, Write};
 /// implementation details of BufWriter. This also allows existing
 /// `BufWriters` to be temporarily given line-buffering logic; this is what
 /// enables Stdout to be alternately in line-buffered or block-buffered mode.
+#[unstable(feature = "core_io_internals", reason = "exposed only for libstd", issue = "none")]
+#[doc(hidden)]
 #[derive(Debug)]
 pub struct LineWriterShim<'a, W: ?Sized + Write> {
     buffer: &'a mut BufWriter<W>,
 }
 
 impl<'a, W: ?Sized + Write> LineWriterShim<'a, W> {
+    #[unstable(feature = "core_io_internals", reason = "exposed only for libstd", issue = "none")]
+    #[doc(hidden)]
     pub fn new(buffer: &'a mut BufWriter<W>) -> Self {
         Self { buffer }
     }

@@ -30,6 +30,15 @@ pub use self::write::Write;
 #[unstable(feature = "core_io_internals", reason = "exposed only for libstd", issue = "none")]
 pub use self::write::default_write_vectored;
 
+// Bare metal platforms usually have very small amounts of RAM
+// (in the order of hundreds of KB)
+#[doc(hidden)]
+#[unstable(feature = "core_io_internals", reason = "exposed only for libstd", issue = "none")]
+pub const DEFAULT_BUF_SIZE: usize = cfg_select! {
+    target_os = "espidf" => { 512 }
+    _ => { 8 * 1024 }
+};
+
 /// Marks that a type `T` can have IO traits such as [`Seek`], [`Write`][write], etc. automatically
 /// implemented for handle types like [`Arc`][arc] as well.
 ///

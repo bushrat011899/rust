@@ -1,8 +1,10 @@
+use core::mem::{self, ManuallyDrop};
+use core::{error, fmt, ptr};
+
 use crate::io::{
     self, DEFAULT_BUF_SIZE, ErrorKind, IntoInnerError, IoSlice, Seek, SeekFrom, Write,
 };
-use crate::mem::{self, ManuallyDrop};
-use crate::{error, fmt, ptr};
+use crate::vec::Vec;
 
 /// Wraps a writer and buffers its output.
 ///
@@ -94,13 +96,17 @@ impl<W: Write> BufWriter<W> {
         BufWriter::with_capacity(DEFAULT_BUF_SIZE, inner)
     }
 
-    pub(crate) fn try_new_buffer() -> io::Result<Vec<u8>> {
+    #[unstable(feature = "core_io_internals", reason = "exposed only for libstd", issue = "none")]
+    #[doc(hidden)]
+    pub fn try_new_buffer() -> io::Result<Vec<u8>> {
         Vec::try_with_capacity(DEFAULT_BUF_SIZE).map_err(|_| {
             io::const_error!(ErrorKind::OutOfMemory, "failed to allocate write buffer")
         })
     }
 
-    pub(crate) fn with_buffer(inner: W, buf: Vec<u8>) -> Self {
+    #[unstable(feature = "core_io_internals", reason = "exposed only for libstd", issue = "none")]
+    #[doc(hidden)]
+    pub fn with_buffer(inner: W, buf: Vec<u8>) -> Self {
         Self { inner, buf, panicked: false }
     }
 
@@ -192,7 +198,9 @@ impl<W: ?Sized + Write> BufWriter<W> {
     /// "successfully written" (by returning nonzero success values from
     /// `write`), any 0-length writes from `inner` must be reported as i/o
     /// errors from this method.
-    pub(in crate::io) fn flush_buf(&mut self) -> io::Result<()> {
+    #[unstable(feature = "core_io_internals", reason = "exposed only for libstd", issue = "none")]
+    #[doc(hidden)]
+    pub fn flush_buf(&mut self) -> io::Result<()> {
         /// Helper struct to ensure the buffer is updated after all the writes
         /// are complete. It tracks the number of written bytes and drains them
         /// all from the front of the buffer when dropped.
@@ -330,7 +338,9 @@ impl<W: ?Sized + Write> BufWriter<W> {
     /// That the buffer is a `Vec` is an implementation detail.
     /// Callers should not modify the capacity as there currently is no public API to do so
     /// and thus any capacity changes would be unexpected by the user.
-    pub(in crate::io) fn buffer_mut(&mut self) -> &mut Vec<u8> {
+    #[unstable(feature = "core_io_internals", reason = "exposed only for libstd", issue = "none")]
+    #[doc(hidden)]
+    pub fn buffer_mut(&mut self) -> &mut Vec<u8> {
         &mut self.buf
     }
 
