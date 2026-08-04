@@ -181,7 +181,7 @@ mod copy;
 mod cursor;
 mod error;
 mod impls;
-#[unstable(feature = "alloc_io", issue = "154046")]
+#[stable(feature = "alloc_io", since = "CURRENT_RUSTC_VERSION")]
 pub mod prelude;
 mod read;
 mod util;
@@ -194,7 +194,7 @@ pub use core::io::SimpleMessage;
 pub use core::io::const_error;
 #[unstable(feature = "core_io_borrowed_buf", issue = "117693")]
 pub use core::io::{BorrowedBuf, BorrowedCursor};
-#[unstable(feature = "alloc_io", issue = "154046")]
+#[stable(feature = "alloc_io", since = "CURRENT_RUSTC_VERSION")]
 pub use core::io::{
     Chain, Cursor, Empty, Error, ErrorKind, IoSlice, IoSliceMut, Repeat, Result, Seek, SeekFrom,
     Sink, Take, Write, empty, repeat, sink,
@@ -209,7 +209,7 @@ use core::io::{
 
 use self::read::{append_to_string, default_read_buf_exact, default_read_exact};
 use self::util::{bytes, lines, split, uninlined_slow_read_byte};
-#[unstable(feature = "alloc_io", issue = "154046")]
+#[stable(feature = "alloc_io", since = "CURRENT_RUSTC_VERSION")]
 pub use self::{
     buf_read::BufRead,
     buffered::{BufReader, BufWriter, IntoInnerError, LineWriter, WriterPanicked},
