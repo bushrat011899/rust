@@ -1,4 +1,4 @@
-#![unstable(feature = "core_io", issue = "154046")]
+#![stable(feature = "core_io", since = "CURRENT_RUSTC_VERSION")]
 
 // On 64-bit platforms, `io::Error` may use a bit-packed representation to
 // reduce size. However, this representation assumes that error codes are

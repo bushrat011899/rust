@@ -118,7 +118,6 @@
 #![feature(const_try)]
 #![feature(copied_into_inner)]
 #![feature(core_intrinsics)]
-#![feature(core_io)]
 #![feature(core_io_borrowed_buf)]
 #![feature(core_io_internals)]
 #![feature(cursor_split)]

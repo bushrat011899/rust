@@ -5,7 +5,7 @@ mod cursor;
 mod error;
 mod impls;
 mod io_slice;
-#[unstable(feature = "core_io", issue = "154046")]
+#[stable(feature = "core_io", since = "CURRENT_RUSTC_VERSION")]
 pub mod prelude;
 mod seek;
 mod size_hint;
@@ -20,7 +20,7 @@ pub use self::error::RawOsError;
 pub use self::error::SimpleMessage;
 #[unstable(feature = "io_const_error", issue = "133448")]
 pub use self::error::const_error;
-#[unstable(feature = "core_io", issue = "154046")]
+#[stable(feature = "core_io", since = "CURRENT_RUSTC_VERSION")]
 pub use self::{
     cursor::Cursor,
     error::{Error, ErrorKind, Result},

@@ -332,7 +332,6 @@
 #![feature(const_default)]
 #![feature(core_float_math)]
 #![feature(core_intrinsics)]
-#![feature(core_io)]
 #![feature(core_io_borrowed_buf)]
 #![feature(core_io_internals)]
 #![feature(cstr_display)]
